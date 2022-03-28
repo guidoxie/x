@@ -14,7 +14,6 @@ func Exec() {
 	}
 	for cmd, args := range cmds {
 		if _, err := exec.LookPath(cmd); err == nil {
-			fmt.Println(cmd, args)
 			cmd := exec.Command(cmd, args...)
 			res, err := cmd.CombinedOutput()
 			if err != nil {
