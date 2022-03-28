@@ -6,13 +6,10 @@ import (
 )
 
 var psCmd = &cobra.Command{
-	Use:   "ps",
+	Use:   "ps COMMAND",
 	Short: "Filter process status",
+	Args:  cobra.ExactArgs(1), // 必须有一个参数
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) > 0 {
-			ps.Exec(args[0])
-		} else {
-			ps.Exec("")
-		}
+		ps.Exec(args[0])
 	},
 }

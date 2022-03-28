@@ -1,22 +1,31 @@
 package ps
 
 import (
-	"fmt"
 	"log"
+	"os"
 	"os/exec"
 )
 
 func Exec(process string) {
-	var ps *exec.Cmd
-	if len(process) > 0 {
-		ps = exec.Command("ps", "-ef", "|", "grep", process)
-	} else {
-		ps = exec.Command("ps", "-ef")
-	}
+	var err error
+	ps := exec.Command("bash", "-c", "ps -ef | grep -v grep | grep -v 'x ps'")
+	grep := exec.Command("grep", process)
 
-	out, err := ps.CombinedOutput()
+	grep.Stdin, err = ps.StdoutPipe()
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
-	fmt.Println(string(out))
+	grep.Stdout = os.Stdout
+	grep.Stderr = os.Stderr
+
+	for _, f := range []func() error{
+		grep.Start,
+		ps.Run,
+	} {
+		if err := f(); err != nil {
+			log.Fatal(err)
+			return
+		}
+	}
 }

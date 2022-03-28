@@ -5,8 +5,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:  "",
-	Long: "",
+	Use: "x",
 }
 
 func init() {
@@ -15,7 +14,5 @@ func init() {
 	rootCmd.AddCommand(sshCmd, psCmd, ipCmd)
 }
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		panic(err)
-	}
+	rootCmd.Execute()
 }
